@@ -1,9 +1,14 @@
-.venv/
-__pycache__/
-*.pyc
-.ipynb_checkpoints/
-.DS_Store
-
+# data
 data/
 outputs/
-EOF
+
+# env
+.venv/
+__pycache__/
+
+# secrets
+.kaggle/
+.env
+
+# notebooks
+.ipynb_checkpoints/
