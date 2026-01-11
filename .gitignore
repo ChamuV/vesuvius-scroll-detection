@@ -1,6 +1,7 @@
 # data
 data/
 outputs/
+images/sandbox/
 
 # env
 .venv/
@@ -12,3 +13,5 @@ __pycache__/
 
 # notebooks
 .ipynb_checkpoints/
+.sandbox_notebooks/
+EOF
