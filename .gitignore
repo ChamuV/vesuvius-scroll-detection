@@ -9,27 +9,50 @@ images/sandbox/
 # Python / virtual env
 # =========================
 .venv/
+venv/
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 
+# =========================
 # Build / packaging
+# =========================
 build/
 dist/
 *.egg-info/
+.eggs/
 
 # =========================
 # Secrets & credentials
 # =========================
 .env
+.env.*
 .kaggle/
+*.key
+*.pem
 
 # =========================
 # Jupyter / experiments
 # =========================
 .ipynb_checkpoints/
 .sandbox_notebooks/
+.notebooks/
+
+# =========================
+# OS / editor noise
+# =========================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# Logs
+# =========================
+*.log
 
 # =========================
 # Documents & papers
