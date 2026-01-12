@@ -14,4 +14,8 @@ __pycache__/
 # notebooks
 .ipynb_checkpoints/
 .sandbox_notebooks/
+
+# documents
+.Papers/
+
 EOF
