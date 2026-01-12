@@ -1,21 +1,37 @@
-# data
+# =========================
+# Data & outputs
+# =========================
 data/
 outputs/
 images/sandbox/
 
-# env
+# =========================
+# Python / virtual env
+# =========================
 .venv/
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
 
-# secrets
-.kaggle/
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# =========================
+# Secrets & credentials
+# =========================
 .env
+.kaggle/
 
-# notebooks
+# =========================
+# Jupyter / experiments
+# =========================
 .ipynb_checkpoints/
 .sandbox_notebooks/
 
-# documents
-.Papers/
-
-EOF
+# =========================
+# Documents & papers
+# =========================
+Papers/
