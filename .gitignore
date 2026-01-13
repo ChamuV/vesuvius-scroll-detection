@@ -4,6 +4,7 @@
 data/
 outputs/
 images/sandbox/
+sandbox_notebooks/
 
 # =========================
 # Python / virtual env
