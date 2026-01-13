@@ -1,4 +1,5 @@
 # src/vesuvius/training/train.py
+import torch
 from torch.utils.data import DataLoader, random_split
 from pathlib import Path
 
@@ -8,6 +9,7 @@ def make_dataloaders(
         data_root: Path,
         batch_size: int,
         val_fraction: float = 0.15,
+        seed: int = 0
 ):
     # Pass data through dataloader
     dataset = VesuviusTrainDataset(data_root)
@@ -16,7 +18,9 @@ def make_dataloaders(
     n_val = max(1, int(val_fraction * n_total)) # fraction of dataset allocated for valuation
     n_train = n_total - n_val # fraction of dataset allocated for traininig
 
-    train_ds, val_ds = random_split(dataset, [n_train, n_val])
+    g = torch.Generator().manual_seed(seed)
+
+    train_ds, val_ds = random_split(dataset, [n_train, n_val], generator=g)
 
     train_loader = DataLoader( 
         train_ds,
