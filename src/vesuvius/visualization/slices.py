@@ -1,3 +1,4 @@
+# src/vesuvius/visualization/slices.py
 from __future__ import annotations
 
 import numpy as np
