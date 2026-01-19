@@ -1,5 +1,7 @@
+# src/vesuvius/losses/targets.py
 from __future__ import annotations
 import torch
+
 
 def make_binary_targets(masks: torch.Tensor, *, ignore_label: int = 2):
     """
