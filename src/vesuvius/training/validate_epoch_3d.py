@@ -13,7 +13,6 @@ def validate_epoch_3d(
     loss_fn,
     device,
     *,
-    metric_fn=dice_from_logits,
     threshold: float = 0.5,
 ):
     model.eval()
@@ -35,7 +34,10 @@ def validate_epoch_3d(
             running_loss += float(loss.item()) * bs
             n_samples += bs
 
-            batch_metrics = metric_fn(logits, targets, threshold=threshold)
+            batch_metrics = dice_from_logits(
+                logits, targets, valid, threshold=threshold
+            )
+
             for k, v in batch_metrics.items():
                 metric_sums[k] = metric_sums.get(k, 0.0) + float(v) * bs
 

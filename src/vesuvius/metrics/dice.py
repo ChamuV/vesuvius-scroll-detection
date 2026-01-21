@@ -7,51 +7,40 @@ import torch
 def dice_from_logits(
     logits: torch.Tensor,
     targets: torch.Tensor,
+    valid: torch.Tensor | None = None,
     *,
     threshold: float = 0.5,
     eps: float = 1e-7,
-):
+) -> dict[str, float]:
     """
-    Dice score for binary segmentation computed from logits.
+    Dice score for binary segmentation computed from logits, with optional valid mask.
 
-    Given predicted binary mask P and ground-truth mask G, the Dice coefficient is
+    P = 1{ sigmoid(logits) >= threshold }
+    G = targets in {0,1}
 
-        Dice(P, G) = 2 |P ∩ G| / (|P| + |G|)
+    If valid is provided, voxels where valid==0 are excluded from both P and G.
 
-    In this implementation:
-      - P = 1{ sigmoid(logits) ≥ threshold }
-      - G = targets ∈ {0, 1}
+    Args:
+        logits:  (B, 1, D, H, W)
+        targets: (B, 1, D, H, W) in {0,1}
+        valid:   (B, 1, D, H, W) bool or 0/1 mask (optional)
+        threshold: probability threshold
+        eps: numerical stability
 
-    Formally, for each sample:
-
-        Dice = (2 * sum(P ⊙ G) + ε) / (sum(P) + sum(G) + ε)
-
-    where the sum is taken over spatial dimensions (D, H, W), and the final
-    value is averaged over the batch.
-
-    Parameters
-    ----------
-    logits : torch.Tensor
-        Raw model outputs of shape (B, 1, D, H, W).
-    targets : torch.Tensor
-        Ground-truth binary masks of shape (B, 1, D, H, W).
-    threshold : float, optional
-        Probability threshold applied after sigmoid, by default 0.5.
-    eps : float, optional
-        Small constant for numerical stability, by default 1e-7.
-
-    Returns
-    -------
-    dict[str, float]
-        Dictionary containing:
-          - "dice": mean Dice coefficient over the batch.
+    Returns:
+        {"dice": float}
     """
-    probs = torch.sigmoid(logits) # probs in (0, 1)
-    preds = (probs >= threshold).float() # binary mask -> preds in {0, 1}
+    probs = torch.sigmoid(logits)
+    preds = (probs >= threshold).float()
+
+    if valid is not None:
+        v = valid.float()
+        preds = preds * v
+        targets = targets * v
 
     dims = (2, 3, 4)
-    intersection = (preds * targets).sum(dims)
-    denom = preds.sum(dims) + targets.sum(dims)
+    intersection = (preds * targets).sum(dim=dims)
+    denom = preds.sum(dim=dims) + targets.sum(dim=dims)
 
-    dice = ((2 * intersection + eps) / (denom + eps)).mean().item()
-    return {"dice": dice}
+    dice = (2.0 * intersection + eps) / (denom + eps)
+    return {"dice": float(dice.mean().item())}
